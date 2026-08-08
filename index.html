@@ -579,9 +579,25 @@
                 font-size: 17px;
             }
         }
+
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 20px;
+            z-index: 9999;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <div id="overlay" onclick="startExperience()">
+        <span>Click me twin</span>
+    </div>
     <!-- Toast Notification -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
@@ -704,6 +720,13 @@
     </div>
 
     <script>
+
+        function startExperience() {
+            loadSong(0);
+            playSong();
+            document.getElementById('overlay').style.display = 'none';
+        }
+        
         // Toast Notification
         function showToast(message) {
             const toast = document.getElementById('toast');
