@@ -324,6 +324,57 @@ h2 b{color:var(--accent);font-weight:400}
 
 .socials a:hover{border-color:var(--accent);color:var(--accent);transform:rotate(-1.5deg)}
 
+.counter{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:16px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  padding:15px 18px;
+  margin-bottom:40px;
+  transform:rotate(-.4deg);
+  box-shadow:5px 5px 0 rgba(0,0,0,.3);
+}
+
+.counter-label{
+  font-family:'Caveat',cursive;
+  font-size:25px;
+  color:var(--muted);
+}
+
+.digits{display:flex;gap:5px}
+
+.digits span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:27px;
+  height:37px;
+  background:#0c0a09;
+  border:1px solid var(--line);
+  color:var(--accent);
+  font-size:19px;
+  font-weight:700;
+  text-shadow:0 0 8px rgba(227,144,63,.35);
+  box-shadow:inset 0 -7px 0 rgba(0,0,0,.45);
+}
+
+.digits span.tick{animation:flip .4s ease}
+
+@keyframes flip{
+  0%{transform:translateY(-40%);opacity:0}
+  100%{transform:translateY(0);opacity:1}
+}
+
+.counter-sub{
+  flex:1 1 160px;
+  font-size:11px;
+  color:#6b6053;
+  letter-spacing:1px;
+  text-align:right;
+}
+
 footer{
   border-top:1px solid var(--line);
   padding-top:18px;
@@ -452,6 +503,12 @@ footer span{font-family:'Caveat',cursive;font-size:19px;color:var(--muted)}
   <a href="https://x.com/enesramedd" target="_blank" rel="noopener">twitter ↗</a>
   <a href="https://www.instagram.com/enesrameds/" target="_blank" rel="noopener">instagram ↗</a>
   <a href="mailto:contactenesramed@gmail.com">say hi</a>
+</section>
+
+<section class="counter">
+  <p class="counter-label">you are a visitor</p>
+  <div class="digits" id="digits" role="img" aria-label="visitor counter loading">??????</div>
+  <p class="counter-sub">no cookies, just a number that goes up</p>
 </section>
 
 <footer>
@@ -625,6 +682,61 @@ discordRow.addEventListener('keydown', (e) => {
 });
 
 document.getElementById('year').textContent = new Date().getFullYear();
+
+const digitsEl = document.getElementById('digits');
+const counterKey = 'enes-visited-here';
+const counterBase = 'https://countapi.mileshilliard.com/api/v1';
+let lastText = '';
+
+function paintDigits(value) {
+  const text = String(value).padStart(6, '0').slice(-6);
+  const numeric = /^[0-9]+$/.test(text);
+  digitsEl.innerHTML = '';
+  for (let i = 0; i < text.length; i++) {
+    const box = document.createElement('span');
+    box.textContent = text[i];
+    if (lastText && lastText[i] !== text[i]) box.classList.add('tick');
+    digitsEl.appendChild(box);
+  }
+  lastText = text;
+  digitsEl.setAttribute('aria-label', numeric ? 'you are visitor ' + Number(text) : 'visitor counter loading');
+}
+
+function cacheCount(value) {
+  try {
+    localStorage.setItem(counterKey, String(value));
+  } catch (err) {}
+}
+
+function readCache() {
+  try {
+    return Number(localStorage.getItem(counterKey)) || 0;
+  } catch (err) {
+    return 0;
+  }
+}
+
+paintDigits('??????');
+
+fetch(counterBase + '/hit/' + counterKey)
+  .then((res) => {
+    if (!res.ok) throw new Error('bad response');
+    return res.json();
+  })
+  .then((data) => {
+    const value = Number(data.value);
+    cacheCount(value);
+    paintDigits(value);
+  })
+  .catch(() => {
+    const cached = readCache();
+    if (cached) {
+      paintDigits(cached);
+    } else {
+      digitsEl.setAttribute('aria-label', 'visitor counter unavailable');
+    }
+  });
+
 load(0);
 sync();
 </script>
