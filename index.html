@@ -257,7 +257,7 @@ h2 b{color:var(--accent);font-weight:400}
   gap:18px;
 }
 
-.projs a{
+.projs > a,.mods{
   flex:1 1 calc(50% - 9px);
   display:flex;
   align-items:center;
@@ -269,17 +269,90 @@ h2 b{color:var(--accent);font-weight:400}
   transition:.18s;
 }
 
-.projs a:first-child{transform:rotate(-.7deg)}
-.projs a:last-child{transform:rotate(.6deg)}
-.projs a:nth-child(2){transform:rotate(.6deg)}
+.projs > :is(a,.mods):first-child{transform:rotate(-.7deg)}
+.projs > :is(a,.mods):last-child{transform:rotate(.6deg)}
+.projs > a:nth-child(2){transform:rotate(.6deg)}
+.projs > a:nth-child(3){transform:rotate(-.5deg)}
+.projs > a:nth-child(4){transform:rotate(.5deg)}
+.projs > a:nth-child(5){transform:rotate(-.6deg)}
 
-.projs a:hover{border-color:var(--accent);transform:translateY(-4px) rotate(0)}
+.projs > a:hover,.mods:not(.open):hover{border-color:var(--accent);transform:translateY(-4px) rotate(0)}
 
 .projs img{width:46px;height:46px;object-fit:contain}
 
 .pname{font-weight:700;letter-spacing:.5px}
 
 .phost{display:block;font-size:11px;color:var(--muted);font-weight:400}
+
+.mods{position:relative}
+.mods.open{z-index:30}
+
+.mods-trigger{
+  flex:1;
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:0;
+  border:0;
+  background:none;
+  color:inherit;
+  font:inherit;
+  text-align:left;
+  cursor:pointer;
+}
+.mods-trigger:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
+
+.mods-pop{
+  position:absolute;
+  right:0;
+  bottom:calc(100% + 14px);
+  z-index:31;
+  min-width:246px;
+  padding:10px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:0 24px 48px rgba(0,0,0,.5),6px 6px 0 rgba(0,0,0,.35);
+  transform-origin:bottom right;
+  animation:modsOpen .2s cubic-bezier(.2,.9,.3,1.15);
+}
+@keyframes modsOpen{
+  from{opacity:0;transform:scale(.6) translateY(16px)}
+  to{opacity:1;transform:none}
+}
+
+.mods-pop-title{
+  margin:0;
+  padding:2px 12px 9px;
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+.mods-pop a{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 12px;
+  border-radius:10px;
+  text-decoration:none;
+  transition:background .15s;
+}
+.mods-pop a:hover{background:#241c14}
+.mods-pop a + a{margin-top:2px}
+.mods-pop img{width:34px;height:34px;object-fit:contain;flex-shrink:0}
+
+.mods-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:25;
+  background:rgba(12,9,7,.55);
+  backdrop-filter:blur(2px);
+  animation:modsFade .18s ease;
+}
+@keyframes modsFade{from{opacity:0}to{opacity:1}}
 
 .links{border-top:1px dashed var(--line)}
 
@@ -416,7 +489,7 @@ footer span{font-family:'Caveat',cursive;font-size:19px;color:var(--muted)}
   .note{margin-top:0}
   .photo{align-self:center}
   .controls button{flex:1;padding:11px 6px}
-  .projs a{flex:1 1 100%;transform:none !important}
+  .projs > a,.mods{flex:1 1 100%;transform:none !important}
 }
 
 @media(prefers-reduced-motion:reduce){
@@ -439,7 +512,7 @@ footer span{font-family:'Caveat',cursive;font-size:19px;color:var(--muted)}
     <img src="thegoat.jpg" alt="enes">
     <figcaption>no context</figcaption>
   </figure>
-  <p class="note">nothing much to say, really.</p>
+  <p class="note">my links were scattered, so I gathered them somewhere.</p>
 </section>
 
 <section class="section">
@@ -470,26 +543,73 @@ footer span{font-family:'Caveat',cursive;font-size:19px;color:var(--muted)}
   <h2>things I made</h2>
   <div class="projs">
     <a href="https://team-company-2be28.web.app/" target="_blank" rel="noopener">
-      <img src="teamCompany.theme.png" alt="">
+      <img src="teamCompany.png" alt="">
       <span>
         <span class="pname">Team Company</span>
         <span class="phost">team-company-2be28.web.app</span>
       </span>
     </a>
-    <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3809757231" target="_blank" rel="noopener">
-      <img src="yomiFixtle.theme.png" alt="">
+    <a href="https://www.roblox.com/games/85582700362622/Silent-Cinema" target="_blank" rel="noopener">
+      <img src="silentCinema.png" alt="">
       <span>
-        <span class="pname">Yomi Fixtle</span>
-        <span class="phost">steam workshop</span>
+        <span class="pname">Silent Cinema</span>
+        <span class="phost">roblox.com</span>
+      </span>
+    </a>
+    <a href="https://lexra.enesramed.workers.dev/" target="_blank" rel="noopener">
+      <img src="lexra.svg" alt="">
+      <span>
+        <span class="pname">Lexra</span>
+        <span class="phost">lexra.enesramed.workers.dev</span>
+      </span>
+    </a>
+    <a href="https://betchai.enesramed.workers.dev/" target="_blank" rel="noopener">
+      <img src="betchai.png" alt="">
+      <span>
+        <span class="pname">BetchAI</span>
+        <span class="phost">betchai.enesramed.workers.dev</span>
       </span>
     </a>
     <a href="https://github.com/enesrameds/vscode-background-image" target="_blank" rel="noopener">
-      <img src="zaLogo.warm.png" alt="">
+      <img src="zaLogo.png" alt="">
       <span>
         <span class="pname">VSCode Background</span>
         <span class="phost">github.com</span>
       </span>
     </a>
+    <div class="mods">
+      <button class="mods-trigger" type="button" aria-expanded="false" aria-controls="mods-pop">
+        <img src="folder.svg" alt="">
+        <span>
+          <span class="pname">My Yomi Mods</span>
+          <span class="phost">3 mods · tap to open</span>
+        </span>
+      </button>
+      <div class="mods-pop" id="mods-pop" role="dialog" aria-label="My Yomi Mods" hidden>
+        <p class="mods-pop-title">My Yomi Mods</p>
+        <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3809757231" target="_blank" rel="noopener">
+          <img src="yomiFixtle.png" alt="">
+          <span>
+            <span class="pname">Yomi Fixtle</span>
+            <span class="phost">steam workshop</span>
+          </span>
+        </a>
+        <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3835190081" target="_blank" rel="noopener">
+          <img src="yomiMultle.png" alt="">
+          <span>
+            <span class="pname">Yomi Multle</span>
+            <span class="phost">steam workshop</span>
+          </span>
+        </a>
+        <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3818519019" target="_blank" rel="noopener">
+          <img src="yomenus.png" alt="">
+          <span>
+            <span class="pname">YoMenus</span>
+            <span class="phost">steam workshop</span>
+          </span>
+        </a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -527,6 +647,8 @@ footer span{font-family:'Caveat',cursive;font-size:19px;color:var(--muted)}
 </div>
 
 <div class="copied" id="copied">copied to clipboard</div>
+
+<div class="mods-backdrop" id="mods-backdrop" hidden></div>
 
 <script>
 const songs = [
@@ -747,6 +869,27 @@ fetch(counterBase + '/hit/' + counterKey)
 
 load(0);
 sync();
+
+const modsWrap = document.querySelector('.mods');
+const modsTrigger = document.querySelector('.mods-trigger');
+const modsPop = document.getElementById('mods-pop');
+const modsBackdrop = document.getElementById('mods-backdrop');
+
+function setMods(open) {
+  modsWrap.classList.toggle('open', open);
+  modsPop.hidden = !open;
+  modsBackdrop.hidden = !open;
+  modsTrigger.setAttribute('aria-expanded', String(open));
+}
+
+modsTrigger.addEventListener('click', () => setMods(modsPop.hidden));
+modsBackdrop.addEventListener('click', () => setMods(false));
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !modsPop.hidden) {
+    setMods(false);
+    modsTrigger.focus();
+  }
+});
 </script>
 </body>
 </html>
